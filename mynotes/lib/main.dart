@@ -1,6 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'Flutter Demo',
     theme: ThemeData(
@@ -41,22 +45,47 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Register'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _email,
-            decoration: InputDecoration(hintText: 'Enter your email here'),
-          ),
-          TextField(
-            controller: _password,
-            decoration:
-                const InputDecoration(hintText: 'Enter your password here'),
-          ),
-          TextButton(
-            onPressed: () async {},
-            child: const Text('Click me'),
-          ),
-        ],
+      body: FutureBuilder(
+        future: Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return Column(
+                children: [
+                  TextField(
+                    controller: _email,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                        hintText: 'Enter your email here'),
+                  ),
+                  TextField(
+                    controller: _password,
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: const InputDecoration(
+                        hintText: 'Enter your password here'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final email = _email.text;
+                      final password = _password.text;
+                      final userCredential = await FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: email, password: password);
+                      print(userCredential);
+                    },
+                    child: const Text('Click me'),
+                  ),
+                ],
+              );
+            default:
+              return const Text('Loading...');
+          }
+        },
       ),
     );
   }
