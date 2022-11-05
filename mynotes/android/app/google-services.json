@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234794713069",
+    "project_id": "mynotes-by-koa",
+    "storage_bucket": "mynotes-by-koa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234794713069:android:82dd99ac75e7b8305bf1e4",
+        "android_client_info": {
+          "package_name": "ms.ko_a.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234794713069-4pbqhkk9t2ln7ne9c4jida01fl7c3c7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvPxajBPe0QgErA0iLFrXZEdVFdF2onaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234794713069-4pbqhkk9t2ln7ne9c4jida01fl7c3c7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
