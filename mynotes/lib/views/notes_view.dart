@@ -1,11 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // as maps import - something like casts
-import 'dart:developer' as devtools show log;
+import 'dart:developer' as devtools show log; //importing only log from package
 
-import 'package:mynotes/constants/routes.dart'; //importing only log from package
-
-enum MenuAction { loguot }
+import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/enums/menu_action.dart';
+import 'package:mynotes/services/auth/auth_service.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
@@ -29,7 +28,7 @@ class _NotesViewState extends State<NotesView> {
                   devtools.log(shouldLogut.toString());
                   // break;
                   if (shouldLogut) {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,
                       (_) => false,
