@@ -10,7 +10,7 @@ class NotesService {
 
   List<DatabaseNote> _notes = [];
 
-  // singletone in dart
+  // singletone in dart - hacky thing
   static final NotesService _shared = NotesService._sharedInstance();
   NotesService._sharedInstance();
   factory NotesService() => _shared;
