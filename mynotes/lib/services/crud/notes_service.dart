@@ -65,8 +65,8 @@ class NotesService {
       throw CouldNotUpdateNoteException();
     } else {
       final updateNote = await getNote(id: note.id);
-      _notes.removeWhere((element) => note.id == updateNote.id);
-      _notes.add(note);
+      _notes.removeWhere((element) => element.id == updateNote.id);
+      _notes.add(updateNote);
       _notesStreamController.add(_notes);
       return updateNote;
     }
@@ -131,7 +131,7 @@ class NotesService {
 
     // make sure owner exists in the database with correct id
     final dbUser = await getUser(email: owner.email);
-    if (dbUser == owner) {
+    if (dbUser != owner) {
       throw CouldNotFindUserException();
     }
 
@@ -293,7 +293,7 @@ class DatabaseNote {
 
   DatabaseNote.fromRow(Map<String, Object?> map)
       : id = map[idColumn] as int,
-        userId = map[emailColumn] as int,
+        userId = map[userIdColumn] as int,
         text = map[textColumn] as String,
         isSyncedWithCloud =
             (map[isSyncedWithCloudColumn] as int) == 1 ? true : false;
@@ -316,17 +316,15 @@ const idColumn = 'id';
 const emailColumn = 'email';
 const userIdColumn = 'user_id';
 const textColumn = 'text';
-const isSyncedWithCloudColumn = 'is_synced_with_cloud_column';
-const createUserTable = '''CREATE TABLE IF NOTE EXISTS "user" (
-        "id"	INTEGER NOT NULL,
-        "email"	TEXT NOT NULL UNIQUE,
-        PRIMARY KEY("id" AUTOINCREMENT)
-      );''';
-const createNoteTable = '''CREATE TABLE IF NOT EXISTS "note" (
-        "id"	INTEGER NOT NULL,
-        "user_id"	INTEGER NOT NULL,
-        "text"	TEXT,
-        "is_synced_with_cloud"	INTEGER NOT NULL DEFAULT 0,
-        PRIMARY KEY("id" AUTOINCREMENT),
-        FOREIGN KEY("user_id") REFERENCES "user"("id")
-      );''';
+const isSyncedWithCloudColumn = 'is_synced_with_cloud';
+const createUserTable = '''CREATE TABLE IF NOT EXISTS user (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL UNIQUE
+      )''';
+const createNoteTable = '''CREATE TABLE IF NOT EXISTS note (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id	INTEGER NOT NULL,
+        text TEXT,
+        is_synced_with_cloud INTEGER NOT NULL DEFAULT 0,
+        FOREIGN KEY(user_id) REFERENCES user(id)
+      )''';
